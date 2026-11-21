@@ -6,7 +6,7 @@ import { cv, FILES } from '@/data/cv.js';
 const file = FILES.find((f) => f.id === 'about');
 
 export default function AboutMd() {
-  const { identity, about, currently, stats } = cv;
+  const { identity, about, currently, stats, contact } = cv;
 
   return (
     <CodeView id="about" file={file} footer={`${stats.length} stats · markdown · ${about.length + currently.length} lines of prose`}>
@@ -14,7 +14,8 @@ export default function AboutMd() {
       <></>
       <span>
         <MdItalic>{identity.role}</MdItalic> · {identity.location} ·{' '}
-        <MdLink href="mailto:alex@morgan.dev">alex@morgan.dev</MdLink>
+        <MdLink href={`mailto:${contact.email}`}>{contact.email}</MdLink> ·{' '}
+        <MdLink href={`mailto:${contact.academicEmail}`}>{contact.academicEmail}</MdLink>
       </span>
       <span>
         {'> '}

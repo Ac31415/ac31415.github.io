@@ -1,6 +1,6 @@
 import React from 'react';
 import CodeView from '@/components/editor/CodeView.jsx';
-import { S, N, P, A, C, Indent } from '@/components/editor/tokens.jsx';
+import { S, N, P, A, C, Indent, MdLink } from '@/components/editor/tokens.jsx';
 import { cv, FILES } from '@/data/cv.js';
 
 const file = FILES.find((f) => f.id === 'education');
@@ -37,10 +37,24 @@ export default function EducationYml() {
       </>,
     );
     lines.push(<Field name="university" value={edu.university} indent={2} />);
-    lines.push(<Field name="year" value={edu.year} isNumber indent={2} />);
-    lines.push(<Field name="field" value={edu.field} indent={2} />);
-    lines.push(<Field name="thesis" value={edu.thesis} indent={2} />);
-    lines.push(<Field name="gpa" value={edu.gpa} indent={2} />);
+    lines.push(<Field name="period" value={edu.period} indent={2} />);
+    lines.push(<Field name="location" value={edu.location} indent={2} />);
+    lines.push(
+      <>
+        <Indent n={2} />
+        <A>coursework</A>
+        <P>:</P>
+      </>,
+    );
+    edu.coursework.forEach((course) => {
+      lines.push(
+        <>
+          <Indent n={3} />
+          <P>- </P>
+          <S>{course}</S>
+        </>,
+      );
+    });
     lines.push(<></>);
   });
 
@@ -62,7 +76,15 @@ export default function EducationYml() {
         <S>{cert.name}</S>
       </>,
     );
-    lines.push(<Field name="year" value={cert.year} isNumber indent={2} />);
+    lines.push(<Field name="date" value={cert.date} indent={2} />);
+    lines.push(
+      <>
+        <Indent n={2} />
+        <A>credential</A>
+        <P>: </P>
+        <MdLink href={cert.url}>{cert.linkLabel}</MdLink>
+      </>,
+    );
   });
 
   return (

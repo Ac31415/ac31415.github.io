@@ -48,11 +48,11 @@ const Header = () => {
         <div className="flex items-center justify-between">
           <div className={`transition-all duration-300 ${isScrolled ? 'scale-90' : 'scale-100'}`}>
             <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-              Alex Morgan
+              Wen-Chung Cheng
             </h1>
             <div className="relative inline-block mt-1">
               <p className="text-base md:text-lg text-muted-foreground font-medium">
-                Full Stack Developer
+                Robotics &amp; Autonomous Systems Researcher
               </p>
               <motion.div
                 className="absolute bottom-0 left-0 h-0.5 bg-accent"

@@ -35,13 +35,17 @@ export default function ProjectsTsx() {
       <P>: </P>
       <T>string</T>
       <P>; </P>
-      <V>tagline</V>
+      <V>org</V>
       <P>: </P>
       <T>string</T>
       <P>; </P>
-      <V>year</V>
+      <V>period</V>
       <P>: </P>
-      <T>number</T>
+      <T>string</T>
+      <P>; </P>
+      <V>venue</V>
+      <P>?: </P>
+      <T>string</T>
       <P>;</P>
     </>,
   );
@@ -54,11 +58,11 @@ export default function ProjectsTsx() {
       <P>[]; </P>
       <V>status</V>
       <P>: </P>
-      <Quote>live</Quote>
+      <Quote>active</Quote>
       <P>{' | '}</P>
-      <Quote>maintained</Quote>
+      <Quote>published</Quote>
       <P>{' | '}</P>
-      <Quote>archived</Quote>
+      <Quote>completed</Quote>
       <P>;</P>
     </>,
   );
@@ -77,18 +81,18 @@ export default function ProjectsTsx() {
     </>,
   );
 
-  items.forEach((p, idx) => {
+  items.forEach((p) => {
     lines.push(
       <>
         <Indent />
-        <P>{'{'}</P>
+        <P>{'{ '}</P>
         <V>name</V>
         <P>: </P>
         <Quote>{p.name}</Quote>
         <P>{', '}</P>
-        <V>year</V>
+        <V>period</V>
         <P>: </P>
-        <N>{p.year}</N>
+        <Quote>{p.period}</Quote>
         <P>{', '}</P>
         <V>status</V>
         <P>: </P>
@@ -98,9 +102,6 @@ export default function ProjectsTsx() {
         <C>{'// ' + p.tagline}</C>
       </>,
     );
-    if (idx === items.length - 1) {
-      // no separator
-    }
   });
 
   lines.push(<P>];</P>);
@@ -132,23 +133,44 @@ export default function ProjectsTsx() {
 
   items.forEach((p) => {
     lines.push(
-      <>
-        <Indent n={3} />
-        <P>{'<'}</P>
-        <Tag>Card</Tag> <A>title</A>
-        <P>=</P>
-        <Quote>{p.name}</Quote> <A>href</A>
-        <P>=</P>
-        <Quote>{p.url}</Quote>
-        <P>{'>'}</P>
-      </>,
+      p.url ? (
+        <>
+          <Indent n={3} />
+          <P>{'<'}</P>
+          <Tag>Card</Tag> <A>title</A>
+          <P>=</P>
+          <Quote>{p.fullTitle || p.name}</Quote> <A>href</A>
+          <P>=</P>
+          <S>"</S>
+          <MdLink href={p.url}>{p.url}</MdLink>
+          <S>"</S>
+          <P>{'>'}</P>
+        </>
+      ) : (
+        <>
+          <Indent n={3} />
+          <P>{'<'}</P>
+          <Tag>Card</Tag> <A>title</A>
+          <P>=</P>
+          <Quote>{p.fullTitle || p.name}</Quote>
+          <P>{'>'}</P>
+        </>
+      ),
     );
     lines.push(
       <>
         <Indent n={4} />
-        <V>{p.description}</V>
+        <C>{'// ' + p.period + ' · ' + p.org + (p.venue ? ' · ' + p.venue : '')}</C>
       </>,
     );
+    p.highlights.forEach((h) => {
+      lines.push(
+        <>
+          <Indent n={4} />
+          <V>{'• ' + h}</V>
+        </>,
+      );
+    });
     lines.push(
       <>
         <Indent n={4} />
@@ -188,7 +210,7 @@ export default function ProjectsTsx() {
   lines.push(<P>{'}'}</P>);
 
   return (
-    <CodeView id="projects" file={file} footer={`${items.length} projects · live in production · open source`}>
+    <CodeView id="projects" file={file} footer={`${items.length} projects · 3 publications · FAU EECS`}>
       {lines.map((node, i) => (
         <span key={i} className="contents">{node}</span>
       ))}

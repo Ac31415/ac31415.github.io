@@ -80,10 +80,10 @@ export default function SkillsTs() {
     </>,
   );
   lines.push(<></>);
-  lines.push(<C>// Always learning. Currently going deep on Bun, Effect-TS, and pgvector.</C>);
+  lines.push(<C>// Focused on heterogeneous multi-robot coordination, sim-to-real transfer, and VLA models.</C>);
 
   return (
-    <CodeView id="skills" file={file} footer={`${total} skills · TypeScript 5.4 · strict mode on`}>
+    <CodeView id="skills" file={file} footer={`${total} skills · ${groups.length} domains · robotics & AI`}>
       {lines.map((node, i) => (
         <span key={i} className="contents">{node}</span>
       ))}

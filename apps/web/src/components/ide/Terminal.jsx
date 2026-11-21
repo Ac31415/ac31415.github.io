@@ -14,15 +14,15 @@ const buildScript = () => [
   { kind: 'cmd', text: 'cat skills.ts | head' },
   {
     kind: 'out',
-    text: `${cv.skills.languages.slice(0, 3).join(' · ')} · ${cv.skills.frontend.slice(0, 2).join(' · ')} · ${cv.skills.backend.slice(0, 2).join(' · ')}`,
+    text: `${cv.skills.roboticsMiddleware.slice(0, 3).join(' · ')} · ${cv.skills.languagesFrameworks.slice(0, 3).join(' · ')} · ${cv.skills.sensorsHardware.slice(0, 2).join(' · ')}`,
   },
-  { kind: 'cmd', text: 'curl -s morgan.dev/availability' },
+  { kind: 'cmd', text: 'curl -s ac31415.github.io/status' },
   {
     kind: 'out',
     text: `{ "status": "${cv.identity.available ? 'open' : 'busy'}", "next": "${cv.identity.availabilityNote}" }`,
   },
   { kind: 'cmd', text: 'echo "Let\'s build something"' },
-  { kind: 'out', text: 'reach out → alex@morgan.dev · cal.com/alexmorgan/intro' },
+  { kind: 'out', text: `reach out → ${cv.contact.email} · ${cv.contact.academicEmail}` },
 ];
 
 const TYPING_SPEED = 22;

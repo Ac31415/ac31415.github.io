@@ -7,7 +7,7 @@ import {
   PanelLeft,
   Terminal as TerminalIcon,
   Mail,
-  Calendar,
+  BookOpen,
   Github,
   Linkedin,
   ExternalLink,
@@ -21,6 +21,7 @@ const socialIcon = (label) => {
   const l = label.toLowerCase();
   if (l.includes('git')) return Github;
   if (l.includes('linked')) return Linkedin;
+  if (l.includes('scholar') || l.includes('pub')) return BookOpen;
   return ExternalLink;
 };
 
@@ -81,11 +82,11 @@ export default function CommandPalette() {
       run: () => window.open(`mailto:${cv.contact.email}`),
     });
     list.push({
-      id: 'cal',
-      label: 'Book a 20-min intro call',
-      hint: 'cal.com',
-      icon: Calendar,
-      run: () => window.open(cv.contact.calendar, '_blank'),
+      id: 'academic-email',
+      label: `Academic Email — ${cv.contact.academicEmail}`,
+      hint: 'fau.edu',
+      icon: Mail,
+      run: () => window.open(`mailto:${cv.contact.academicEmail}`),
     });
     cv.social.forEach((s) =>
       list.push({

@@ -1,6 +1,6 @@
 import React from 'react';
 import CodeView from '@/components/editor/CodeView.jsx';
-import { K, S, N, P, B, Quote, Indent } from '@/components/editor/tokens.jsx';
+import { K, S, N, P, B, Quote, Indent, MdLink } from '@/components/editor/tokens.jsx';
 import { cv, FILES } from '@/data/cv.js';
 
 const file = FILES.find((f) => f.id === 'experience');
@@ -45,7 +45,9 @@ export default function ExperienceJson() {
         <>
           <Indent n={2} />
           <Key>url</Key>
-          <Quote>{job.companyUrl}</Quote>
+          <S>"</S>
+          <MdLink href={job.companyUrl}>{job.companyUrl}</MdLink>
+          <S>"</S>
           <P>,</P>
         </>,
       );

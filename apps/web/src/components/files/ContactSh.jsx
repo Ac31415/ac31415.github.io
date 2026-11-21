@@ -1,6 +1,6 @@
 import React from 'react';
 import CodeView from '@/components/editor/CodeView.jsx';
-import { K, S, N, P, V, F, A, C, Quote, MdLink } from '@/components/editor/tokens.jsx';
+import { K, S, N, P, V, F, C, Quote, MdLink } from '@/components/editor/tokens.jsx';
 import { cv, FILES } from '@/data/cv.js';
 
 const file = FILES.find((f) => f.id === 'contact');
@@ -10,7 +10,7 @@ export default function ContactSh() {
 
   const lines = [];
   lines.push(<C>#!/usr/bin/env bash</C>);
-  lines.push(<C># Pick the channel that fits — I read everything within 24h.</C>);
+  lines.push(<C># Pick the channel that fits — feel free to reach out via email or academic links.</C>);
   lines.push(<></>);
   lines.push(
     <>
@@ -21,16 +21,9 @@ export default function ContactSh() {
   );
   lines.push(
     <>
-      <V>PHONE</V>
+      <V>ACADEMIC_EMAIL</V>
       <P>=</P>
-      <Quote>{contact.phone}</Quote>
-    </>,
-  );
-  lines.push(
-    <>
-      <V>CALENDAR</V>
-      <P>=</P>
-      <Quote>{contact.calendar}</Quote>
+      <Quote>{contact.academicEmail}</Quote>
     </>,
   );
   lines.push(
@@ -38,6 +31,20 @@ export default function ContactSh() {
       <V>LOCATION</V>
       <P>=</P>
       <Quote>{contact.location}</Quote>
+    </>,
+  );
+  lines.push(
+    <>
+      <V>PUBLICATIONS</V>
+      <P>=</P>
+      <Quote>{contact.publications}</Quote>
+    </>,
+  );
+  lines.push(
+    <>
+      <V>PORTFOLIO</V>
+      <P>=</P>
+      <Quote>{contact.portfolio}</Quote>
     </>,
   );
   lines.push(<></>);
@@ -51,9 +58,9 @@ export default function ContactSh() {
   );
   lines.push(
     <>
-      <F>open</F> <S>"</S>
-      <MdLink href={contact.calendar}>{contact.calendar}</MdLink>
-      <S>"</S> <C># 20-min intro call</C>
+      <F>open</F> <S>"mailto:</S>
+      <MdLink href={`mailto:${contact.academicEmail}`}>{contact.academicEmail}</MdLink>
+      <S>"</S> <C># Florida Atlantic University</C>
     </>,
   );
   lines.push(<></>);
@@ -70,12 +77,12 @@ export default function ContactSh() {
   lines.push(<></>);
   lines.push(
     <>
-      <F>echo</F> <Quote>Currently open to: contract roles, advisory, fractional CTO partnerships.</Quote>
+      <F>echo</F> <Quote>Open to robotics research collaborations, internships, and autonomous systems roles.</Quote>
     </>,
   );
   lines.push(
     <>
-      <F>echo</F> <Quote>Based in {contact.location}. Available for travel.</Quote>
+      <F>echo</F> <Quote>Based in {contact.location} (FAU EECS, Boca Raton).</Quote>
     </>,
   );
   lines.push(<></>);
@@ -86,7 +93,7 @@ export default function ContactSh() {
   );
 
   return (
-    <CodeView id="contact" file={file} footer={`bash · ${social.length} social channels · ${identity.timezone}`}>
+    <CodeView id="contact" file={file} footer={`bash · ${social.length} links · ${identity.timezone}`}>
       {lines.map((node, i) => (
         <span key={i} className="contents">{node}</span>
       ))}
