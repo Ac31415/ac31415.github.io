@@ -11,10 +11,8 @@ import sessionJournalPlugin from './plugins/session-journal/vite-plugin-session-
 
 import { readFileSync } from 'node:fs';
 
-const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
+const pkg = JSON.parse(readFileSync(path.resolve(__dirname, 'package.json'), 'utf-8'));
 const allDeps = Object.keys(pkg.dependencies || {});
-
-const isDev = process.env.NODE_ENV !== 'production';
 
 // Only the Horizons editor may read this dev server cross-origin. `cors: true`
 // sends `Access-Control-Allow-Origin: *`, which lets any site read the source
@@ -333,22 +331,6 @@ const addTransformIndexHtml = {
 			},
 		];
 
-		if (!isDev && process.env.TEMPLATE_BANNER_SCRIPT_URL && process.env.TEMPLATE_REDIRECT_URL) {
-			tags.push(
-				{
-					tag: 'script',
-					attrs: {
-						src: process.env.TEMPLATE_BANNER_SCRIPT_URL,
-						'template-redirect-url': process.env.TEMPLATE_REDIRECT_URL,
-						...(process.env.TEMPLATE_BANNER_MAIN_TEXT && { 'template-main-text': process.env.TEMPLATE_BANNER_MAIN_TEXT }),
-						...(process.env.TEMPLATE_BANNER_CTA_TEXT && { 'template-cta-text': process.env.TEMPLATE_BANNER_CTA_TEXT }),
-						...(process.env.TEMPLATE_BANNER_THEME && { 'template-theme': process.env.TEMPLATE_BANNER_THEME }),
-					},
-					injectTo: 'head',
-				}
-			);
-		}
-
 		return {
 			html,
 			tags,
@@ -369,51 +351,56 @@ logger.error = (msg, options) => {
 	loggerError(msg, options);
 }
 
-export default defineConfig({
-	optimizeDeps: {
-		include: allDeps,
-	},
-	customLogger: logger,
-	plugins: [
-		...(isDev ? [inlineEditPlugin(), editModeDevPlugin(), selectionModePlugin(), iframeRouteRestorationPlugin(), sitePagesPlugin(), pocketbaseAuthPlugin(), sessionJournalPlugin()] : []),
-		react(),
-		addTransformIndexHtml
-	],
-	server: {
-		port: 3000,
-		cors: { origin: AllowedEditorOrigins },
-		headers: {
-			'Cross-Origin-Embedder-Policy': 'credentialless',
+export default defineConfig(({ command }) => {
+	const isDev = command === 'serve';
+
+	return {
+		base: '/',
+		optimizeDeps: {
+			include: allDeps,
 		},
-		allowedHosts: [
-			'.app-preview.com',
-			'.app-preview.io',
+		customLogger: logger,
+		plugins: [
+			...(isDev ? [inlineEditPlugin(), editModeDevPlugin(), selectionModePlugin(), iframeRouteRestorationPlugin(), sitePagesPlugin(), pocketbaseAuthPlugin(), sessionJournalPlugin(), addTransformIndexHtml] : []),
+			react(),
 		],
-		fs: {
-			strict: true,
-			allow: [
-				path.resolve(__dirname),
-				path.join(path.resolve(__dirname, '../..'), 'node_modules'),
+		server: {
+			port: 3000,
+			cors: { origin: AllowedEditorOrigins },
+			headers: {
+				'Cross-Origin-Embedder-Policy': 'credentialless',
+			},
+			allowedHosts: [
+				'.app-preview.com',
+				'.app-preview.io',
 			],
+			fs: {
+				strict: true,
+				allow: [
+					path.resolve(__dirname),
+					path.join(path.resolve(__dirname, '../..'), 'node_modules'),
+				],
+			},
 		},
-	},
-	resolve: {
-		extensions: ['.jsx', '.js', '.json'],
-		alias: {
-			'@': path.resolve(__dirname, './src'),
+		resolve: {
+			extensions: ['.jsx', '.js', '.json'],
+			alias: {
+				'@': path.resolve(__dirname, './src'),
+			},
 		},
-	},
-	build: {
-		rollupOptions: {
-			external: [
-				'@babel/parser',
-				'@babel/traverse',
-				'@babel/generator',
-				'@babel/types'
-			],
-			checks: {
-				pluginTimings: false,
+		build: {
+			emptyOutDir: true,
+			rollupOptions: {
+				external: [
+					'@babel/parser',
+					'@babel/traverse',
+					'@babel/generator',
+					'@babel/types'
+				],
+				checks: {
+					pluginTimings: false,
+				}
 			}
 		}
-	}
+	};
 });

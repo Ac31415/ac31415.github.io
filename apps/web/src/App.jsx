@@ -13,6 +13,7 @@ function App() {
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="*" element={<HomePage />} />
           </Routes>
         </Router>
       </WorkspaceProvider>
